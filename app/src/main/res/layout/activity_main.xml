@@ -43,9 +43,9 @@
             style="@style/Button_special"/>
 
         <Button
-            android:id="@+id/btn_percent"
+            android:id="@+id/btn_convert"
             android:background="@drawable/button_special"
-            android:text="@string/percent"
+            android:text="@string/convert"
             style="@style/Button_special"/>
 
         <Button

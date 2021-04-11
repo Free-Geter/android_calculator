@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity implements OnClickListener {
 
+    private static final String TAG = "numbers";
     Button btn_1; // 数字1
     Button btn_2; // 数字2
     Button btn_3; // 数字3
@@ -78,12 +79,58 @@ public class MainActivity extends Activity implements OnClickListener {
         btn_point.setOnClickListener(this);
         btn_equals.setOnClickListener(this);
 
+        //初始化展示区
+        num_init();
+    }
+
+    class numBuffer {
+        double value = 0;
+        boolean empty = true;
+        boolean intable = false;
+
+        numBuffer(double d) {
+            value = d;
+            empty = false;
+            if (isIntegerForDouble(d)) {
+                intable = true;
+            } else intable = false;
+        }
+
+        boolean isIntegerForDouble(double obj) {
+            double eps = 1e-10;  // 精度范围
+            return obj - Math.floor(obj) < eps;
+        }
+
+        void clear() {
+            value = 0;
+            empty = true;
+            intable = false;
+        }
+    }
+
+    class opBuffer {
+        String value = null;
+        boolean empty = true;
+
+        opBuffer(String str) {
+            value = str;
+            empty = false;
+        }
+
+        void clear() {
+            value = null;
+            empty = true;
+        }
     }
 
     //定义第一个操作数和第二个操作数
-    double d1 = 0, d2 = 0;
+    numBuffer double1, double2;
+    double d1, d2;
     //定义运算符
-    String oprator = "";
+    opBuffer op;
+    String operator = "";
+    //输入标识符
+    boolean input_flag = true;
 
     @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
     @Override
@@ -103,65 +150,117 @@ public class MainActivity extends Activity implements OnClickListener {
             case R.id.btn_0:
             case R.id.btn_point:
                 // 点击数字按钮和小数点时，在文本内追加内容
-                et_Text.setText(str + ((Button) v).getText().toString());
+                num_concate(v, input_flag);
                 break;
             case R.id.btn_plus:
             case R.id.btn_minus:
             case R.id.btn_multiply:
             case R.id.btn_divide:
-                // 点击运算符按钮时，获取前面输入的第一个运算符
+                input_flag = false;
                 d1 = Double.parseDouble(et_Text.getText().toString());
-                // 添加到文本区域内
-                et_Text.setText(str + " " + ((Button) v).getText().toString() + " ");
+                double1 = new numBuffer(d1);
                 // 获取点击的运算符
-                oprator = ((Button) v).getText().toString();
+                operator = ((Button) v).getText().toString();
+                op = new opBuffer(operator);
                 break;
             case R.id.btn_clear:
-                // 清空文本内容
-                et_Text.setText("");
+                // 清空缓冲区、清空文本内容
+                clear();
                 break;
             case R.id.btn_del:
                 // 点击删除按钮，删除一个字符
-                if (str != null && !str.equals("")) {
-                    str = str.substring(0, str.length() - 1);
-                    et_Text.setText(str);
-                }
+                delete();
                 break;
             case R.id.btn_equals:
                 // 计算结果方法，获取第二个输入的数字
-                int start = str.lastIndexOf(oprator);
-                d2 = Double.parseDouble(str.substring(start + 1, str.length()));
-                getResult(d1, d2, oprator);
+                // int start = str.lastIndexOf(operator);
+                // d2 = Double.parseDouble(str.substring(start + 1, str.length()));
+                if (input_flag) {
+                    d2 = Double.parseDouble(et_Text.getText().toString());
+                    double2 = new numBuffer(d2);
+                }
+                else {
+                    if (double2 != null)
+                        double1 = double2;
+                    d2 = Double.parseDouble(et_Text.getText().toString());
+                    double2 = new numBuffer(d2);
+                }
+                getResult(double2, double1, op);
+                input_flag = false;
                 break;
         }
     }
 
     // 计算结果
-    private void getResult(double d1, double d2, String oprator) {
+    private void getResult(numBuffer double1, numBuffer double2, opBuffer op) {
         // 计算结果
-        String str = et_Text.getText().toString();
+        Log.d(TAG, "getResult: " + double1.value + double2.value);
         double result = 0;
-        if (oprator.equals("+")) {
-            result = d1 + d2;
-        } else if (oprator.equals("-")) {
-            result = d1 - d2;
-        } else if (oprator.equals("×")) {
-            result = d1 * d2;
-        } else if (oprator.equals("÷")) {
-            if (d2 == 0) {
+        if (op.value.equals("+")) {
+            result = double1.value + double2.value;
+        } else if (op.value.equals("-")) {
+            result = double1.value - double2.value;
+        } else if (op.value.equals("×")) {
+            result = double1.value * double2.value;
+        } else if (op.value.equals("÷")) {
+            if (double2.value == 0) {
                 result = 0;
             } else {
-                result = d1 / d2;
+                result = double1.value / double2.value;
             }
         }
 
-        // 如果不包含小数点则为小数和除法运算
-        if (!str.contains(".") && oprator != "÷") {
+        // 如果不包含小数点和除法运算
+        if (double1.intable && double2.intable && (op.value != "÷")) {
             et_Text.setText(((int) result) + "");
         } else {
             et_Text.setText(result + "");
         }
+    }
 
+    @SuppressLint("SetTextI18n")
+    private void num_concate(View v, boolean flag) {
+        String str = et_Text.getText().toString();
+        if (((Button) v).getText().toString().equals(".") && flag && str.equals("0")) {
+            et_Text.setText(str + ((Button) v).getText().toString());
+            input_flag = true;
+        } else if (str.equals("0") && flag) {
+            et_Text.setText(((Button) v).getText().toString());
+            input_flag = true;
+        } else if (!str.equals("0") && flag) {
+            et_Text.setText(str + ((Button) v).getText().toString());
+            input_flag = true;
+        } else if (!flag) {
+            et_Text.setText(((Button) v).getText().toString());
+            input_flag = true;
+        }
+    }
+
+    private void clear() {
+        d1 = 0;
+        d2 = 0;
+        operator = "";
+        double1 = null;
+        double2 = null;
+        op = null;
+        et_Text.setText("0");
+    }
+
+    private void delete() {
+        String str = et_Text.getText().toString();
+        if (str != null && !str.equals("0")) {
+            if (str.length() > 1)
+                str = str.substring(0, str.length() - 1);
+            else
+                str = "0";
+            et_Text.setText(str);
+        } else {
+            et_Text.setText("0");
+        }
+    }
+
+    private void num_init() {
+        et_Text.setText("0");
     }
 
 }
