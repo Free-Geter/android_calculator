@@ -1,54 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+ <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="587dp" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:gravity="center">
 
-    <CheckBox
-        android:id="@+id/checkBox2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CheckBox"
-        tools:layout_editor_absoluteX="217dp"
-        tools:layout_editor_absoluteY="517dp" />
+ <ImageView
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:src="@drawable/qq"/>
 
-    <androidx.constraintlayout.helper.widget.Layer
-        android:layout_width="310dp"
-        android:layout_height="221dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="98dp">
+ <TextView
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:gravity="center"
+     android:text="QQ"
+     android:textSize="50sp" />
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:srcCompat="@tools:sample/avatars" />
+</LinearLayout>
 
-        <EditText
-            android:id="@+id/editTextTextPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPassword" />
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
 
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CheckBox" />
-    </androidx.constraintlayout.helper.widget.Layer>
+ <EditText
+     android:id="@+id/username"
+     android:layout_width="350dp"
+     android:layout_height="0dp"
+     android:layout_weight="1"
+     android:hint="请输入用户名"
+     android:background="@drawable/et_bg"
+     android:gravity="center"
+     android:drawableStart="@drawable/user"
+     android:padding="15dp"
+     android:drawableEnd="@drawable/pull_down"
+     android:maxLines="1"
+     android:maxEms="10"
+     />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+ <EditText
+     android:id="@+id/password"
+     android:layout_width="350dp"
+     android:layout_height="0dp"
+     android:layout_weight="1"
+     android:hint="请输入密码"
+     android:background="@drawable/et_bg"
+     android:gravity="center"
+     android:inputType="textPassword"
+     android:layout_marginTop="20dp"
+     android:paddingHorizontal="10dp"
+     android:maxLines="1"
+     android:maxEms="30"/>
+
+</LinearLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:gravity="center">
+
+ <ImageButton
+     android:id="@+id/login"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:src="@drawable/login"
+     android:background="@null"/>
+
+</LinearLayout>
+
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:layout_weight="1">
+ </LinearLayout>
+
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:layout_weight="0.5"
+     android:gravity="center">
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="手机号登录"
+      android:layout_marginRight="30dp"
+      android:layout_marginLeft="30dp"/>
+
+  <View
+      android:layout_marginTop="3dp"
+      android:layout_width="2dp"
+      android:layout_height="12dp"
+      android:background="@color/gray"
+      />
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="找回密码"
+      android:layout_marginRight="30dp"
+      android:layout_marginLeft="30dp"/>
+
+  <View
+      android:layout_marginTop="3dp"
+      android:layout_width="2dp"
+      android:layout_height="12dp"
+      android:background="@color/gray"
+      />
+
+  <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="新用户注册"
+      android:layout_marginRight="30dp"
+      android:layout_marginLeft="30dp"/>
+
+
+ </LinearLayout>
+
+
+</LinearLayout>
+
